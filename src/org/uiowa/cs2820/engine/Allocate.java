@@ -3,40 +3,69 @@ package org.uiowa.cs2820.engine;
 import java.io.IOException;
 import java.util.BitSet;
 
-import org.uiowa.cs2820.engine.Checkpoint;
-
 public class Allocate {
-	// not quite sure about this 
-	// need a file name to store the bit array
+
 	private BitSet space = new BitSet();
-	Checkpoint c = new Checkpoint((Object) space);
+	Checkpoint c = new Checkpoint(this.space);
 	
+
+	Allocate(BitSet space) {
+		this.space = space;
+	}
 	
+
+
+	
+	public BitSet getSpace() throws IOException {
+		//Checkpoint c = new Checkpoint(this.space);
+		this.space = (BitSet) c.restore();
+		return this.space;
+	}
+	
+	public void setSpace(int x) {
+		this.space.set(x);
+	}
+
 	// allocate finds the next available block that can be allocated for use
 	public int allocate() throws IOException {
 		// use Checkpoint to restore bit array from the file
-		Object o = c.restore();
-		space = (BitSet) o;
+		Checkpoint c = new Checkpoint(this.space);
+		this.space = (BitSet) c.restore();
 		int nextAvailable;
-		for (nextAvailable = 0; nextAvailable <= space.length(); nextAvailable++) {
-			if (space.get(nextAvailable) == false) {
-				space.set(nextAvailable);
-				// use Checkpoint to save bit array back to file
-				c.save();
-				return nextAvailable;
+		if (this.space == null) {
+			System.out.println("returned bitset is null");
+			this.space = new BitSet();
+			this.space.set(0);
+			c = new Checkpoint(this.space);
+			c.save();
+			return 0;
+		} else {
+			for (nextAvailable = 0; nextAvailable <= this.space.length(); nextAvailable++) {
+				if (this.space.get(nextAvailable) == false) {
+					this.space.set(nextAvailable);
+					// use Checkpoint to save bit array back to file
+					System.out.println("next space set: " + this.space);
+					c = new Checkpoint(this.space);
+					c.save();
+					//StaticCheckpoint.save();
+					return nextAvailable;
+				}
 			}
 		}
 		// this should be unreachable
 		c.save();
-		return nextAvailable + 1;
+		//return nextAvailable + 1;
+		return 5;
 	}
 
 	public void free(int block) throws IOException {
 		// use Checkpoint to restore bit array from the file
+		Checkpoint c = new Checkpoint(this.space);
 		Object o = c.restore();
-		space = (BitSet) o;
-		space.clear(block); // update bit array
+		this.space = (BitSet) o;
+		this.space.clear(block); // update bit array
 		// use Checkpoint to save bit array back to file
+		c = new Checkpoint(this.space);
 		c.save();
 		
 	}

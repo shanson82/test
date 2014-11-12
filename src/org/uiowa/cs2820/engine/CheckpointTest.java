@@ -20,7 +20,7 @@ public class CheckpointTest {
 		String s2 = (String) ckp1.restore();
 		assertEquals(s1, s2);
 	}
-
+/*
 	@Test
 	public void test2() throws IOException{
 		int[] s1 = {1,2,3,4,5};
@@ -30,7 +30,7 @@ public class CheckpointTest {
 		System.out.println("s2 = "+s2);
 		assertEquals(s1, s2);
 	}
-	
+*/	
 	@Test
 	public void test3() throws IOException{
 		Field s1 = new Field("Name", "Value");
@@ -52,13 +52,28 @@ public class CheckpointTest {
 	
 	@Test
 	public void test5() throws IOException {
-		BitSet b = new BitSet(4);
+		BitSet b = new BitSet();
 		b.set(3);
 		Checkpoint ckp5 = new Checkpoint(b);
 		ckp5.save();
 		BitSet c = (BitSet) ckp5.restore();
 		assertEquals(b.length(), c.length());
+		b.set(4);
+		ckp5.save();
+		c = (BitSet) ckp5.restore();
+		assertEquals(b.length(), c.length());
+		System.out.println(b);
+		System.out.println(c);
+		assertEquals(b, c);
 		
 	}
 
+	@Test
+	public void test6() throws IOException {
+		BitSet b = new BitSet();
+		Checkpoint ckp6 = new Checkpoint(b);
+		ckp6.save();
+		BitSet c = (BitSet) ckp6.restore();
+		assertEquals(b,c);
+	}
 }

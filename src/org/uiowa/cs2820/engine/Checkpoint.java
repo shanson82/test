@@ -2,6 +2,7 @@ package org.uiowa.cs2820.engine;
 
 import java.io.*;
 import java.lang.String;
+import java.util.BitSet;
 
 public class Checkpoint {
 	
@@ -24,7 +25,7 @@ public class Checkpoint {
 	
 	public void save() throws IOException{
 		FileOutputStream f = new FileOutputStream(filename);
-		byte[] bArray = Utility.convert(o);
+		byte[] bArray = Utility.convert(this.o);
 		int length = bArray.length;
 		// next encode length into 2 bytes
 		byte [] extra = new byte[2];
@@ -52,6 +53,7 @@ public class Checkpoint {
 		f.read(bArray);
 		Object obj = Utility.revert(bArray);
 		f.close();
+		
 		return obj;
 	}
 }
