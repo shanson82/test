@@ -10,11 +10,10 @@ public class KeyNode implements Serializable {
 	private int next;
 	
 	KeyNode(byte[] key) {
-		Allocate a = new Allocate(new BitSet());
 		this.key = key;
 		try {
-			this.next = a.allocate();
-			this.value = a.allocate();
+			this.next = -1;
+			this.value = Allocate.allocate();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
@@ -26,6 +25,18 @@ public class KeyNode implements Serializable {
 	
 	public int getNext() {
 		return this.next;
+	}
+	
+	public void setNext(int area) {
+		this.next = area;
+	}
+	
+	public int getValue() {
+		return this.value;
+	}
+	
+	public void setValue(int area) {
+		this.value = area;
 	}
 
 }

@@ -13,5 +13,16 @@ public class IDNode implements Serializable {
 		this.size = id.length;
 		this.next = -1;
 	}
+	
+	public byte[] getid() {
+		return this.id;
+	}
+	
+	public int getNext() {
+		return this.next;
+	}
 
+	public void setNext(int area) {
+		this.next = area;
+	}
 }

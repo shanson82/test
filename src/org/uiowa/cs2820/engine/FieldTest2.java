@@ -4,19 +4,21 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class FieldTest {
-/*
+import java.util.ArrayList;
+
+public class FieldTest2 {
+
 	@Test
 	public void test0() {
-	  Database D = new LinearMemoryDatabase();
+	  Database D = new LinearFileDatabase();
 	  FieldSearch F = new FieldSearch(D);
 	  Field F1 = new Field("1",new Integer(45));
-	  assertEquals(F.findEquals(F1).length,0);
+	  assertEquals(F.findEquals(F1).size(),0);
 	  }
 	
 	@Test
 	public void test1() {
-	  Database D = new LinearMemoryDatabase();
+	  Database D = new LinearFileDatabase();
 	  FieldSearch F = new FieldSearch(D);
 	  Indexer I = new Indexer(D,"abc");
 	  Field F1 = new Field("1",new Integer(45));
@@ -26,15 +28,15 @@ public class FieldTest {
 	  I.addField(F2);
 	  I = new Indexer(D,"def");
 	  I.addField(F3);
-	  String[] S = F.findEquals(F3);
-	  assertEquals(S.length,2);
-	  assertEquals(S[0],"abc");
-	  assertEquals(S[1],"def");
+	  ArrayList<String> S = F.findEquals(F3);
+	  assertEquals(S.size(),2);
+	  assertEquals(S.get(0),"abc");
+	  assertEquals(S.get(1),"def");
 	  }
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void test2() {
-	  Database D = new LinearMemoryDatabase();
+	  Database D = new LinearFileDatabase();
 	  Indexer I = new Indexer(D,"data");
 	  Field F = new Field("Iowa",
 		"some very long string that should not" +
@@ -43,5 +45,4 @@ public class FieldTest {
 	    "code for creating a Field");
 		I.addField(F); 
 	  }
-	  */
     }
