@@ -38,9 +38,13 @@ public class LinearFileDatabase implements Database {
 				return null; // indicates no keys in file
 			}
 			int areaToSearch = h.getNext();
+			System.out.println("Found head, next area is: " + areaToSearch);
 			while (true) {
 				n = G.readArea(areaToSearch);
 				KeyNode k = (KeyNode) Utility.revert(n);
+				Field f1 = (Field) Utility.revert(k.getKey());
+				System.out.println("Field: " + f1.getFieldName() + " " + f1.getFieldValue());
+				System.out.println("Value area and next area: " + k.getValue() + " " + k.getNext());
 				if (k.getKey() == key)
 					return k;
 				if (k.getNext() == -1) return null;
@@ -61,11 +65,12 @@ public class LinearFileDatabase implements Database {
 			Head h = (Head) Utility.revert(n);
 			System.out.println("head points to: " + h.getNext());
 			if (h.getNext() == -1) {
-				int areaToWrite = Allocate.allocate();
-				h.setNext(areaToWrite);
+				int areaToWriteKey = Allocate.allocate();
+				h.setNext(areaToWriteKey);
 				KeyStorage ks = new KeyStorage(new KeyNode(key));
-				ks.add(areaToWrite);
-				ValueStorage vs = new ValueStorage(id, areaToWrite);
+				ks.add(areaToWriteKey);
+				int areaToWriteID = Allocate.allocate();
+				ValueStorage vs = new ValueStorage(id, areaToWriteID);
 				vs.store();
 				G.writeArea(0, Utility.convert(h));
 				return;
@@ -78,6 +83,7 @@ public class LinearFileDatabase implements Database {
 				if (k.getNext() == -1) {
 					int areaToWrite = Allocate.allocate();
 					k.setNext(areaToWrite);
+					G.writeArea(nextArea, Utility.convert(k));
 					// insert new KeyNode
 					KeyStorage ks = new KeyStorage(new KeyNode(key));
 					ks.add(areaToWrite); // write new KeyNode to area
