@@ -76,7 +76,10 @@ public class ValueStorage {
 	
 	public ArrayList<String> load() {
 		ArrayList<String> identifiers = new ArrayList<String>();
-		if (this.areaToSearch == -1) return identifiers;
+		if (this.areaToSearch == -1) {
+			System.out.println("ValueStorage load - nothing to return");
+			return identifiers;
+		}
 		File diskMem = new File("diskSpace.txt");
 		DiskSpace G = new DiskSpace(diskMem);
 		int searchArea = this.areaToSearch;

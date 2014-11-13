@@ -24,7 +24,10 @@ public class FieldSearch {
   		ArrayList<String> identifiers = new ArrayList<String>();
   		byte[] key = f.toBytes();
   		KeyNode p = D.fetch(key);
-  		if (p == null) return identifiers;
+  		if (p == null) {
+  			System.out.println("FieldSearch.findEquals - fetch returns null");
+  			return identifiers;
+  		}
   		ValueStorage vs = new ValueStorage(p.getValue());
   		identifiers = vs.load();
   		return identifiers;

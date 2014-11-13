@@ -10,6 +10,7 @@ public class FieldTest2 {
 
 	@Test
 	public void test0() {
+	  System.out.println("test0");
 	  Database D = new LinearFileDatabase();
 	  FieldSearch F = new FieldSearch(D);
 	  Field F1 = new Field("1",new Integer(45));
@@ -18,6 +19,7 @@ public class FieldTest2 {
 	
 	@Test
 	public void test1() {
+	  System.out.println("test1");
 	  Database D = new LinearFileDatabase();
 	  FieldSearch F = new FieldSearch(D);
 	  Indexer I = new Indexer(D,"abc");
@@ -36,6 +38,7 @@ public class FieldTest2 {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void test2() {
+	  System.out.println("test2");
 	  Database D = new LinearFileDatabase();
 	  Indexer I = new Indexer(D,"data");
 	  Field F = new Field("Iowa",
