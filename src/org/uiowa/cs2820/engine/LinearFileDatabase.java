@@ -67,10 +67,12 @@ public class LinearFileDatabase implements Database {
 			if (h.getNext() == -1) {
 				int areaToWriteKey = Allocate.allocate();
 				h.setNext(areaToWriteKey);
-				KeyStorage ks = new KeyStorage(new KeyNode(key));
+				KeyNode kn = new KeyNode(key);
+				KeyStorage ks = new KeyStorage(kn);
 				ks.add(areaToWriteKey);
-				int areaToWriteID = Allocate.allocate();
-				ValueStorage vs = new ValueStorage(id, areaToWriteID);
+				//int areaToWriteID = Allocate.allocate();
+				ValueStorage vs = new ValueStorage(id, kn.getValue());
+				//ValueStorage vs = new ValueStorage(id, areaToWriteKey);
 				vs.store();
 				G.writeArea(0, Utility.convert(h));
 				return;
