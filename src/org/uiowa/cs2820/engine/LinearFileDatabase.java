@@ -104,19 +104,7 @@ public class LinearFileDatabase implements Database {
 					k.setNext(areaToWriteKey);
 					G.writeArea(currentArea, Utility.convert(k));
 					return;
-				
-				/*	int areaToWrite = Allocate.allocate();
-					k.setNext(areaToWrite);
-					G.writeArea(nextArea, Utility.convert(k));
-					// insert new KeyNode
-					KeyStorage ks = new KeyStorage(new KeyNode(key));
-					ks.add(areaToWrite); // write new KeyNode to area
-					ValueStorage vs = new ValueStorage(id, areaToWrite);
-					vs.store();
-					return; */
 				}
-
-				//n = G.readArea(k.getNext());
 				currentArea = k.getNext();
 				System.out.println("area to read next: " + currentArea);
 			}
@@ -126,6 +114,7 @@ public class LinearFileDatabase implements Database {
 		return;
 	}
 	
+	// deletion methods not implemented
 	public void delete(byte[] key, String id) {
 		return;
 	}
