@@ -12,7 +12,7 @@ public class KeyNode implements Serializable {
 	KeyNode(byte[] key) {
 		this.key = key;
 		this.next = -1;
-		this.value = -1; //Allocate.allocate();		
+		this.value = -1;	
 	}
 	
 	public byte[] getKey() {
