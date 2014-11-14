@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class ValueStorage {
 	
 	private IDNode inode; // identifier node
-	private byte[] key; // key in byte[] format
+//	private byte[] key; // key in byte[] format
 	private int areaToWrite; // this is non-negative if identifier is the first written to a field
 	private int areaToSearch; // this is non-negative if not the first identifier to be written to a field
 	
@@ -15,8 +15,13 @@ public class ValueStorage {
 	ValueStorage(String id, int areaToWrite) {
 		byte[] idArray = Utility.convert(id);
 		this.inode = new IDNode(idArray);
-		this.key = null;
-		this.areaToWrite = areaToWrite;
+//		this.key = null;
+		try {
+			this.areaToWrite = Allocate.allocate();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.areaToSearch = -1;
 	}
 	
@@ -24,7 +29,7 @@ public class ValueStorage {
 	ValueStorage(String id, int areaToWrite, int areaToSearch) {
 		byte[] idArray = Utility.convert(id);
 		this.inode = new IDNode(idArray);
-		this.key = null;
+//		this.key = null;
 		this.areaToWrite = -1;
 		this.areaToSearch = areaToSearch;
 	}
@@ -32,7 +37,7 @@ public class ValueStorage {
 	// constructor to use if searching for identifiers (see FieldSearch)
 	ValueStorage(int areaToSearch) {
 		this.inode = null;
-		this.key = null;
+//		this.key = null;
 		this.areaToWrite = -1;
 		this.areaToSearch = areaToSearch;
 	}
@@ -42,6 +47,7 @@ public class ValueStorage {
 		File diskMem = new File("diskSpace.txt");
 		DiskSpace G = new DiskSpace(diskMem);
 		try {
+			System.out.println("Value storage store() area to write: " + this.areaToWrite);
 			// the area in the file to write the identifier is known
 			if (this.areaToWrite != -1) {
 				G.writeArea(this.areaToWrite, identifier);

@@ -11,12 +11,8 @@ public class KeyNode implements Serializable {
 	
 	KeyNode(byte[] key) {
 		this.key = key;
-		try {
-			this.next = -1;
-			this.value = Allocate.allocate();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}		
+		this.next = -1;
+		this.value = -1; //Allocate.allocate();		
 	}
 	
 	public byte[] getKey() {

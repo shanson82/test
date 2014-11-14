@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.Arrays;
 
 
 public class LinearFileDatabase implements Database {
@@ -45,8 +46,10 @@ public class LinearFileDatabase implements Database {
 				Field f1 = (Field) Utility.revert(k.getKey());
 				System.out.println("Field: " + f1.getFieldName() + " " + f1.getFieldValue());
 				System.out.println("Value area and next area: " + k.getValue() + " " + k.getNext());
-				if (k.getKey() == key)
+				if (Arrays.equals(k.getKey(), key)) {
+					System.out.println("Fetch - keys are equal");
 					return k;
+				}
 				if (k.getNext() == -1) return null;
 				areaToSearch = k.getNext();
 			}
@@ -79,8 +82,21 @@ public class LinearFileDatabase implements Database {
 			}
 			int nextArea = h.getNext();
 			while (true) {
-				n = G.readArea(nextArea);
+				n = G.readArea(nextArea);		
 				KeyNode k = (KeyNode) Utility.revert(n); // revert back to KeyNode 
+				System.out.println("area reading: " + nextArea);
+				System.out.println("KeyNode points to next and value: " + k.getNext() + " " + k.getValue());
+				
+				// key stored in node matches the key to be stored
+				//if (k.getKey() == key) {
+				if (Arrays.equals(k.getKey(),  key)) {
+					System.out.println("Keys are equal");
+					int areaToSearch = k.getValue();
+					ValueStorage vs = new ValueStorage(id, -1, areaToSearch);
+					vs.store();
+					return;
+				}
+				
 				// either no other keys in file or no matches and now at the end of the list
 				if (k.getNext() == -1) {
 					int areaToWrite = Allocate.allocate();
@@ -93,15 +109,10 @@ public class LinearFileDatabase implements Database {
 					vs.store();
 					return;
 				}
-				// key stored in node matches the key to be stored
-				if (k.getKey() == key) {
-					int areaToSearch = k.getValue();
-					ValueStorage vs = new ValueStorage(id, -1, areaToSearch);
-					vs.store();
-					return;
-				}
+
 				//n = G.readArea(k.getNext());
 				nextArea = k.getNext();
+				System.out.println("area to read next: " + nextArea);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
