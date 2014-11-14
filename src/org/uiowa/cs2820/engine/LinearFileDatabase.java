@@ -70,36 +70,42 @@ public class LinearFileDatabase implements Database {
 			if (h.getNext() == -1) {
 				int areaToWriteKey = Allocate.allocate();
 				h.setNext(areaToWriteKey);
-				KeyNode kn = new KeyNode(key);
-				KeyStorage ks = new KeyStorage(kn);
-				ks.add(areaToWriteKey);
-				//int areaToWriteID = Allocate.allocate();
-				ValueStorage vs = new ValueStorage(id, kn.getValue());
-				//ValueStorage vs = new ValueStorage(id, areaToWriteKey);
-				vs.store();
 				G.writeArea(0, Utility.convert(h));
+				KeyStorage ks = new KeyStorage(key);
+				ValueStorage vs = new ValueStorage(id, -1);
+				ks.getNode().setValue(vs.getArea()); // set pointer of KeyNode to point to IDNode
+				ks.putNode(areaToWriteKey);
+				vs.store();		
 				return;
 			}
-			int nextArea = h.getNext();
+			int currentArea = h.getNext();
 			while (true) {
-				n = G.readArea(nextArea);		
+				n = G.readArea(currentArea);		
 				KeyNode k = (KeyNode) Utility.revert(n); // revert back to KeyNode 
-				System.out.println("area reading: " + nextArea);
+				System.out.println("area reading: " + currentArea);
 				System.out.println("KeyNode points to next and value: " + k.getNext() + " " + k.getValue());
 				
 				// key stored in node matches the key to be stored
-				//if (k.getKey() == key) {
 				if (Arrays.equals(k.getKey(),  key)) {
 					System.out.println("Keys are equal");
 					int areaToSearch = k.getValue();
-					ValueStorage vs = new ValueStorage(id, -1, areaToSearch);
+					ValueStorage vs = new ValueStorage(id, areaToSearch);
 					vs.store();
 					return;
-				}
-				
+				}			
 				// either no other keys in file or no matches and now at the end of the list
 				if (k.getNext() == -1) {
-					int areaToWrite = Allocate.allocate();
+					int areaToWriteKey = Allocate.allocate();
+					KeyStorage ks = new KeyStorage(key);
+					ValueStorage vs = new ValueStorage(id, -1);
+					ks.getNode().setValue(vs.getArea());
+					ks.putNode(areaToWriteKey);
+					vs.store();
+					k.setNext(areaToWriteKey);
+					G.writeArea(currentArea, Utility.convert(k));
+					return;
+				
+				/*	int areaToWrite = Allocate.allocate();
 					k.setNext(areaToWrite);
 					G.writeArea(nextArea, Utility.convert(k));
 					// insert new KeyNode
@@ -107,12 +113,12 @@ public class LinearFileDatabase implements Database {
 					ks.add(areaToWrite); // write new KeyNode to area
 					ValueStorage vs = new ValueStorage(id, areaToWrite);
 					vs.store();
-					return;
+					return; */
 				}
 
 				//n = G.readArea(k.getNext());
-				nextArea = k.getNext();
-				System.out.println("area to read next: " + nextArea);
+				currentArea = k.getNext();
+				System.out.println("area to read next: " + currentArea);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
